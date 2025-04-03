@@ -3,29 +3,11 @@
 """
 简化的Hloc ROS节点
 
-订阅的话题:start_task
-    Float32: 目标图片的位置路径
-
-
-launch文件内添加
-```
-<node pkg="reloc" type="reloc_controller.py" name="reloc_controller" required="true" output="screen" args="$(root), $(arg dataname) $(arg)"/>
-```
-- root: 包含data与outputs的路径
-- dataname: 数据集名称
-
-路径
-${root}
-├── data
-│   └── ${dataset_name}
-│       ├── db
-│       └── query
-├── outputs
-│   └── ${dataset_name}
-│       ├── sfm_aligned
-│       ├── *.h5
-│       ├── *.txt
+订阅的话题:
+/hloc/loc_from_query: 接收参数:String, 目标图片的位置路径
+/hloc/loc_from_camera: 不接收参数, 从相机获取图片进行定位
 """
+
 
 import rospy
 from std_msgs.msg import String, Empty
@@ -40,15 +22,15 @@ import numpy as np
 
 from pathlib import Path
 import pycolmap
-from hloc import extract_features, match_features, pairs_from_retrieval
+from hloc import match_features
+from component import extract_features, pairs_from_retrieval
 from hloc.utils.base_model import dynamic_load
 from hloc import extractors
 from hloc.localize_sfm import QueryLocalizer, pose_from_cluster
 import torch
-from typing import List, Tuple
-import time
+from typing import Tuple
 
-from utils import get_pairs_info, cam2world, calculate_quat, orientation2np
+from utils import get_pairs_info, cam2world
 
 
 class HlocNode:
