@@ -1,0 +1,1 @@
+rostopic pub -1 /hloc/loc_from_camera std_msgs/Empty "{}" 

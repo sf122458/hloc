@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- 数据集根路径 -->
+    <arg name="root" default="/home/ps/hloc/src/hloc"/>
+    <!-- 数据集名称 -->
+    <arg name="dataname" default="town_large"/>
+    <!-- 相机话题 -->
+    <!-- <arg name="camera_topic" default="/camera/color/image_raw"/> -->
+    <arg name="camera_topic" default="/iris/usb_cam/image_raw"/>
+    <!-- 无人机设置位置话题 -->
+    <arg name="setpoint_topic" default="/mavros/setpoint_position/local"/>
+    <node pkg="hloc" type="hloc_node.py" name="hloc_node" required="true" output="screen" args="$(arg root) $(arg dataname) $(arg camera_topic) $(arg setpoint_topic)"/>
+
+</launch>
